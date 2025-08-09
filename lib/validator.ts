@@ -1,8 +1,9 @@
+// @/lib/validator.ts
+
 import { z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
 
-//Price validation reusable rule
-
+// Price validation reusable rule
 const currency = z
   .string()
   .refine(
@@ -22,5 +23,7 @@ export const insertProductSchema = z.object({
   banner: z.string().nullable(),
   price: currency,
   tags: z.array(z.string()).optional(),
-  updatedAt: z.string(), // will hold ISO date
+
+  // --- CHANGE THIS LINE ---
+  updatedAt: z.string().optional(), // Add .optional() here
 });
