@@ -5,7 +5,7 @@ import { formatNumberWithDecimal } from "./utils";
 
 // Price validation reusable rule
 const currency = z
-  .string()
+  .number()
   .refine(
     (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
     "Price must have exactly two decimal places (e.g., 49.99)"
