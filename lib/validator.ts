@@ -1,6 +1,4 @@
-// @/lib/validator.ts
-
-import { z } from "zod";
+import { email, z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
 
 // Price validation reusable rule
@@ -26,4 +24,12 @@ export const insertProductSchema = z.object({
 
   // --- CHANGE THIS LINE ---
   updatedAt: z.string().optional(), // Add .optional() here
+});
+
+export const signInFormSchema = z.object({
+  email: z
+    .string()
+    .email("Invalid email address")
+    .min(2, "Email must be at least 3 characters"),
+  password: z.string().min(3, "Password must be at least 3 character"),
 });
