@@ -2,7 +2,6 @@ import { compareSync } from "bcrypt-ts-edge";
 import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 import { prisma } from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
@@ -47,7 +46,37 @@ export const config = {
       },
     }),
   ],
+
   callbacks: {
+    //The JWT callback is called whenever a token is created or updated
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user, trigger, session }: any) {
+      //This block runs only on initial sign-in
+      if (user) {
+        //Assign the user's role to the token
+        token.role = user.role;
+
+        //Handle cases where the user has no name
+        if (user.name === "NO_NAME") {
+          //Use part of the email before the "@" as the default name
+          token.name = user.email!.split("@")[0];
+
+          //Update the user in the database with the new default name
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name },
+          });
+        }
+      }
+      //This block handles session updates, such as a name change
+      if (trigger === "update" && session?.user.name) {
+        token.name = session.user.name;
+      }
+      return token;
+    },
+
+    // The session callback is called whenever a session is accessed.
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, user, trigger, token }: any) {
       session.user.id = token.sub;

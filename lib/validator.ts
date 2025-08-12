@@ -1,4 +1,4 @@
-import { email, z } from "zod";
+import { z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
 
 // Price validation reusable rule
@@ -33,3 +33,17 @@ export const signInFormSchema = z.object({
     .min(2, "Email must be at least 3 characters"),
   password: z.string().min(3, "Password must be at least 3 character"),
 });
+
+export const signUpFromSchema = z
+  .object({
+    name: z.string().min(3, "Name must be least 3 character"),
+    email: z.string().min(3, "Email must be at least 3 characters"),
+    password: z.string().min(3, "Password must be at least 3 characters"),
+    confirmPassword: z
+      .string()
+      .min(3, "Confirm password must be at least 3 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords donot match",
+    path: ["confirmPassword"],
+  });
