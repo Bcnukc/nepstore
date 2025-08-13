@@ -47,3 +47,24 @@ export const signUpFromSchema = z
     message: "Passwords donot match",
     path: ["confirmPassword"],
   });
+
+// Cart
+
+export const cartItemschema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  name: z.string().min(1, "Name is required"),
+  slug: z.string().min(1, "Slug is required"),
+  qty: z.number().int().min(1, "Quantity must be at least 1"),
+  image: z.string().min(1, "Image is required"),
+  price: currency,
+});
+
+export const inserCartSchema = z.object({
+  items: z.array(cartItemschema),
+  itemsPrice: currency,
+  totalPrice: currency,
+  shippingPrice: currency,
+  taxPrice: currency,
+  sessionCartId: z.string().min(1, "Session cart id is required"),
+  userId: z.string().optional().nullable(),
+});

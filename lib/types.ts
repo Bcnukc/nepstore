@@ -1,3 +1,5 @@
+import { cartItemschema, inserCartSchema } from "./validator";
+import { z } from "zod";
 export type Product = {
   id: string;
   name: string;
@@ -16,3 +18,6 @@ export type Product = {
   createdAt: string;
   updatedAt?: string; // optional since DB doesn't have it
 };
+
+export type Cart = z.infer<typeof inserCartSchema>;
+export type CartItem = z.infer<typeof cartItemschema>;
