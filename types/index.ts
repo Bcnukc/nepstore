@@ -1,6 +1,9 @@
+import {
+  insertProductSchema,
+  cartItemschema,
+  inserCartSchema,
+} from "@/lib/validator";
 import { z } from "zod";
-import { insertProductSchema } from "@/lib/validator";
-
 // Automatically create a 'Product' type from our Zod schema
 export type Product = z.infer<typeof insertProductSchema> & {
   id: string;
@@ -8,3 +11,5 @@ export type Product = z.infer<typeof insertProductSchema> & {
   rating: number; // match your mapping output
   numReviews: number;
 };
+export type Cart = z.infer<typeof inserCartSchema>;
+export type CartItem = z.infer<typeof cartItemschema>;
