@@ -20,7 +20,7 @@ export function formatNumberWithDecimal(num: number): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function formatError(error: any): string {
-  if (error.name === "ZodError") {
+  if (error.name === "ZodError" && error.errors) {
     //Handle Zod validation errors
     const fieldErrors = Object.keys(error.errors).map((field) => {
       const message = error.errors[field].message;
@@ -41,3 +41,13 @@ export function formatError(error: any): string {
       : JSON.stringify(error.message);
   }
 }
+
+export const round2 = (value: number | string) => {
+  if (typeof value === "number") {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  } else if (typeof value === "string") {
+    return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+  } else {
+    throw new Error("value is not a number nor a string");
+  }
+};
